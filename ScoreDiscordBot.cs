@@ -9,18 +9,19 @@ namespace Sportsbot
 {
     public class ScoreDiscordBot
     {
-        private DiscordShardedClient? client;
-        private string lastRequested;
-        private readonly string token;
+        private DiscordShardedClient client;
+        private readonly string? token;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="config"></param>
         public ScoreDiscordBot(IConfigurationRoot config)
         {
-            this.token = config.GetRequiredSection("DiscordToken").Value;
-            lastRequested = string.Empty;
+            if (config != null)
+            {
+                this.token = config?.GetRequiredSection("DiscordToken")?.Value ?? string.Empty;
+            }
 
             var commands = new CommandService(new CommandServiceConfig
             {

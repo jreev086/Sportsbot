@@ -4,8 +4,8 @@
 
     public class Injector
     {
-        public static IServiceProvider ServiceProvider { get; set; }
-        private static IServiceCollection _serviceCollection;
+        public static IServiceProvider? ServiceProvider { get; set; }
+        private static IServiceCollection? _serviceCollection;
         private static bool _isInitialized = false;
 
         public static void Init()

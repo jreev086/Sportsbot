@@ -57,29 +57,6 @@ namespace Sportsbot.Services
             {
                 var result = await commands.ExecuteAsync(context, markPos, Injector.ServiceProvider);
             }
-
-            //// Ignore system messages and messages from bots
-            //// Bail out if it's a System Message.
-            //if (arg is not SocketUserMessage msg)
-            //    return;
-
-            //// Parse the command and arguments from the message
-            //string[] parts = msg.Content.Split(' ');
-            //string command = parts[0].ToLower();
-            //string[] args = parts.Length > 1 ? parts[1..] : new string[0];
-
-            //// Process the commands
-            //switch (command)
-            //{
-            //    case "!baseball":
-            //        //await msg.Channel.SendMessageAsync("", false, EmbedBaseballScore(BuildBaseballGameData()).Build());
-            //        //lastRequested = DateTime.Now.ToString("yyyyMMdd");
-            //        break;
-            //    case "!hockey":
-            //        await msg.Channel.SendMessageAsync("Pong!");
-            //        break;
-            //        // Add more commands as needed
-            //}
         }
     }
 }

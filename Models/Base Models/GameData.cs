@@ -1,18 +1,20 @@
-﻿namespace Sportsbot.Base_Models
+﻿namespace Sportsbot.Models.Base_Models
 {
-    public class GameData
+    internal class GameData : IGameData
     {
-        public GameData()
+        internal GameData()
         {
             this.Id = Guid.NewGuid();
+            this.AwayTeam = string.Empty;
+            this.HomeTeam = string.Empty;
         }
 
         public Guid Id { get; set; }
-        public string? AwayTeam { get; set; }
-        public string? HomeTeam { get; set; }
-        public int? AwayScore { get; set; }
-        public int? HomeScore { get; set; }
-        public int? AwayTeamId { get; internal set; }
-        public int? HomeTeamId { get; internal set; }
+        public string AwayTeam { get; set; }
+        public string HomeTeam { get; set; }
+        public int AwayScore { get; set; }
+        public int HomeScore { get; set; }
+        public int AwayTeamId { get; set; }
+        public int HomeTeamId { get; set; }
     }
 }

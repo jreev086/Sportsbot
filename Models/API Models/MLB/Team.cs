@@ -1,80 +1,68 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Sportsbot.API_Models
+namespace Sportsbot.Models.API_Models.MLB
 {
-    public class Venue
-    {
-        [JsonPropertyName("id")]
-        public int? Id;
-
-        [JsonPropertyName("name")]
-        public string Name;
-
-        [JsonPropertyName("link")]
-        public string Link;
-    }
-
-    public class Team
+    internal class Team
     {
         [JsonPropertyName("springLeague")]
-        public SpringLeague SpringLeague;
+        public SpringLeague? SpringLeague;
 
         [JsonPropertyName("allStarStatus")]
-        public string AllStarStatus;
+        public string? AllStarStatus;
 
         [JsonPropertyName("id")]
-        public int? Id;
+        public int Id;
 
         [JsonPropertyName("name")]
-        public string Name;
+        public string? Name;
 
         [JsonPropertyName("link")]
-        public string Link;
+        public string? Link;
 
         [JsonPropertyName("season")]
-        public int? Season;
+        public int Season;
 
         [JsonPropertyName("venue")]
-        public Venue Venue;
+        public Venue? Venue;
 
         [JsonPropertyName("springVenue")]
-        public SpringVenue SpringVenue;
+        public SpringVenue? SpringVenue;
 
         [JsonPropertyName("teamCode")]
-        public string TeamCode;
+        public string? TeamCode;
 
         [JsonPropertyName("fileCode")]
-        public string FileCode;
+        public string? FileCode;
 
         [JsonPropertyName("abbreviation")]
-        public string Abbreviation;
+        public string? Abbreviation;
 
         [JsonPropertyName("teamName")]
-        public string TeamName;
+        public string? TeamName;
 
         [JsonPropertyName("locationName")]
-        public string LocationName;
+        public string? LocationName;
 
         [JsonPropertyName("firstYearOfPlay")]
-        public string FirstYearOfPlay;
+        public string? FirstYearOfPlay;
 
         [JsonPropertyName("league")]
-        public League League;
+        public League? League;
 
         [JsonPropertyName("division")]
-        public Division Division;
+        public Division? Division;
 
         [JsonPropertyName("sport")]
-        public Sport Sport;
+        public Sport? Sport;
 
         [JsonPropertyName("shortName")]
-        public string ShortName;
+        public string? ShortName;
 
         [JsonPropertyName("franchiseName")]
-        public string FranchiseName;
+        public string? FranchiseName;
 
         [JsonPropertyName("clubName")]
-        public string ClubName;
+        public string? ClubName;
 
         [JsonPropertyName("active")]
         public bool? Active;
