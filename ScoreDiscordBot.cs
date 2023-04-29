@@ -9,7 +9,7 @@ namespace Sportsbot
 {
     public class ScoreDiscordBot
     {
-        private DiscordShardedClient client;
+        private readonly DiscordShardedClient client;
         private readonly string? token;
 
         /// <summary>

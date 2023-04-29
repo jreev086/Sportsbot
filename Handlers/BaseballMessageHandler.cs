@@ -84,8 +84,8 @@ namespace Sportsbot.Handlers
             {
                 if (game != null)
                 {
-                    builder.Append($"{(game.AwayTeam.Length < 3 ? game.AwayTeam.Append(' ') : game.AwayTeam)} : ").AppendLine($"{game.AwayScore}");
-                    builder.Append($"{(game.HomeTeam.Length < 3 ? game.HomeTeam.Append(' ') : game.HomeTeam)} : ").AppendLine($"{game.HomeScore}");
+                    builder.Append($"{(game.AwayTeam.Length < 3 ? string.Format("{0} ", game.AwayTeam) : game.AwayTeam)} : ").AppendLine($"{game.AwayScore}");
+                    builder.Append($"{(game.HomeTeam.Length < 3 ? string.Format("{0} ", game.HomeTeam) : game.HomeTeam)} : ").AppendLine($"{game.HomeScore}");
                     builder.AppendLine("-------------------------");
                 }
             }
