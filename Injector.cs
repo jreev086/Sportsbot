@@ -4,7 +4,9 @@
 
     public class Injector
     {
-        public static IServiceProvider? ServiceProvider { get; set; }
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+        public static IServiceProvider ServiceProvider { get; set; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         private static IServiceCollection? _serviceCollection;
         private static bool _isInitialized = false;
 
@@ -26,15 +28,21 @@
             where TInterface : class
             where TImplementation : class, TInterface
         {
-            _serviceCollection.AddSingleton<TInterface, TImplementation>();
-            ServiceProvider = _serviceCollection.BuildServiceProvider();
+            if(_serviceCollection is not null)
+            {
+                _serviceCollection.AddSingleton<TInterface, TImplementation>();
+                ServiceProvider = _serviceCollection.BuildServiceProvider();
+            }
         }
 
         public static void RegisterInstance<TInterface>(TInterface instance)
             where TInterface : class
         {
-            _serviceCollection.AddSingleton<TInterface>(instance);
-            ServiceProvider = _serviceCollection.BuildServiceProvider();
+            if(_serviceCollection is not null)
+            {
+                _serviceCollection.AddSingleton<TInterface>(instance);
+                ServiceProvider = _serviceCollection.BuildServiceProvider();
+            }
         }
     }
 }

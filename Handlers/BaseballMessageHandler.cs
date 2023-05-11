@@ -7,20 +7,52 @@ namespace Sportsbot.Handlers
 {
     public class BaseballMessageHandler
     {
-        public EmbedBuilder GetEmbedMessage()
-        {
-            var data = BuildBaseballGameData();
+        private readonly GameRoot gameResults;
+        private readonly TeamRoot teams;
 
-            return EmbedBaseballScore(data);
-        }
-
-        private List<GameData> BuildBaseballGameData()
+        /// <summary>
+        /// 
+        /// </summary>
+        public BaseballMessageHandler()
         {
-            var gameResults = GetGameDataAsync("http://statsapi.mlb.com/api/v1/schedule/games/?sportId=1")
+            gameResults = GetGameDataAsync("http://statsapi.mlb.com/api/v1/schedule/games/?sportId=1")
                 .ConfigureAwait(false)
                 .GetAwaiter()
                 .GetResult();
 
+            teams = GetTeamDataAsync("https://statsapi.mlb.com/api/v1/teams?sportId=1")
+                .ConfigureAwait(false)
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public EmbedBuilder EmbedStandings()
+        {
+            throw new NotImplementedException("Not functional yet");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public EmbedBuilder EmbedGamesInProgress()
+        {
+            //var games = new List<GameData>();
+            throw new NotImplementedException("Not functional yet");
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public EmbedBuilder EmbedBaseballFinalScore()
+        {
             var games = new List<GameData>();
 
             if (gameResults is not null && gameResults.Dates is not null)
@@ -29,37 +61,37 @@ namespace Sportsbot.Handlers
                 {
                     if (gameDate is not null && gameDate.Games is not null)
                     {
-                        foreach (var game in gameDate.Games.Where(x => x.Status.DetailedState.Equals("Final", StringComparison.InvariantCultureIgnoreCase)))
+                        foreach (var game in gameDate.Games)
                         {
-                            var awayTeamResult = GetTeamDataAsync(string.Format("https://statsapi.mlb.com/api/v1/teams/{0}", game.Teams.Away.Team.Id))
-                                .ConfigureAwait(false)
-                                .GetAwaiter()
-                                .GetResult();
-
-                            var homeTeamResult = GetTeamDataAsync(string.Format("https://statsapi.mlb.com/api/v1/teams/{0}", game.Teams.Home.Team.Id))
-                                .ConfigureAwait(false)
-                                .GetAwaiter()
-                                .GetResult();
-
-                            games.Add(new GameData
+                            if(game.Status is not null && game.Status.DetailedState is not null && game.Status.DetailedState.Equals("final", StringComparison.InvariantCultureIgnoreCase))                       
                             {
-                                AwayTeamId = game.Teams.Away.Team.Id,
-                                HomeTeamId = game.Teams.Home.Team.Id,
-                                AwayTeam = awayTeamResult.Teams[0].Abbreviation,
-                                HomeTeam = homeTeamResult.Teams[0].Abbreviation,
-                                AwayScore = game.Teams.Away.Score,
-                                HomeScore = game.Teams.Home.Score
-                            });
+                                games.Add(new GameData
+                                {
+                                    AwayTeamId = game?.Teams?.Away?.Team?.Id ?? 0,
+                                    HomeTeamId = game?.Teams?.Home?.Team?.Id ?? 0,
+                                    AwayTeam = teams?.Teams?.FirstOrDefault(x => x.Id == game?.Teams?.Away?.Team?.Id)?.Abbreviation ?? string.Empty,
+                                    HomeTeam = teams?.Teams?.FirstOrDefault(x => x.Id == game?.Teams?.Home?.Team?.Id)?.Abbreviation ?? string.Empty,
+                                    AwayScore = game?.Teams?.Away?.Score ?? 0,
+                                    HomeScore = game?.Teams?.Home?.Score ?? 0
+                                });
+                            }
                         }
                     }
                 }
             }
 
-            return games;
-        }
+            if (games is null || games.Count <= 0)
+            {
+                return new EmbedBuilder
+                {
+                    // Embed property can be set within object initializer
+                    Title = "MLB scores",
+                    Description = "There are no games to display.",
+                    Color = Color.Blue,
+                    Timestamp = DateTime.Now
+                };
+            }
 
-        private EmbedBuilder EmbedBaseballScore(List<GameData> games)
-        {
             var embed = new EmbedBuilder
             {
                 // Embed property can be set within object initializer
@@ -68,13 +100,6 @@ namespace Sportsbot.Handlers
                 Color = Color.Blue,
                 Timestamp = DateTime.Now
             };
-
-            if (games is null || games.Count <= 0)
-            {
-                embed.AddField("There are no games to display.", string.Empty);
-
-                return embed;
-            }
 
             var builder = new StringBuilder();
 
@@ -95,25 +120,33 @@ namespace Sportsbot.Handlers
             return embed;
         }
 
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="uri"></param>
         /// <returns></returns>
-        private async Task<GameRoot?> GetGameDataAsync(string uri)
+        private static async Task<GameRoot> GetGameDataAsync(string uri)
         {
-            var client = new HttpClient();
-
-            HttpResponseMessage response = await client.GetAsync(uri);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var responseContent = await response.Content.ReadAsAsync<GameRoot>();
+                var client = new HttpClient();
 
-                return responseContent;
+                HttpResponseMessage response = await client.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsAsync<GameRoot>();
+
+                    return responseContent;
+                }
+            }
+            catch (Exception)
+            {
+
             }
 
-            return null;
+            return new GameRoot();
         }
 
         /// <summary>
@@ -121,20 +154,27 @@ namespace Sportsbot.Handlers
         /// </summary>
         /// <param name="uri"></param>
         /// <returns></returns>
-        private async Task<TeamRoot?> GetTeamDataAsync(string uri)
+        private static async Task<TeamRoot> GetTeamDataAsync(string uri)
         {
-            var client = new HttpClient();
+            try
+            { 
+                var client = new HttpClient();
 
-            HttpResponseMessage response = await client.GetAsync(uri);
+                HttpResponseMessage response = await client.GetAsync(uri);
 
-            if (response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsAsync<TeamRoot>();
+
+                    return responseContent;
+                }
+            }
+            catch (Exception)
             {
-                var responseContent = await response.Content.ReadAsAsync<TeamRoot>();
 
-                return responseContent;
             }
 
-            return null;
+            return new TeamRoot();
         }
     }
 }

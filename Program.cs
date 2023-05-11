@@ -5,5 +5,5 @@ var config = new ConfigurationBuilder()
     .AddJsonFile($"appsettings.json")
     .Build();
 
-var bot = new ScoreDiscordBot(config);
+var bot = new ScoreDiscordBot(config?.GetRequiredSection("DiscordToken")?.Value ?? string.Empty);
 await bot.MainAsync();

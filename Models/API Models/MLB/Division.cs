@@ -4,13 +4,20 @@ namespace Sportsbot.Models.API_Models.MLB
 {
     internal class Division
     {
+        public Division()
+        {
+            Id = 0;
+            Name = string.Empty;
+            Link = string.Empty;
+        }
+
         [JsonPropertyName("id")]
-        public int? Id;
+        public int Id { get; set; }
 
         [JsonPropertyName("name")]
-        public string? Name;
+        public string Name { get; set; }
 
         [JsonPropertyName("link")]
-        public string? Link;
+        public string Link { get; set; }
     }
 }

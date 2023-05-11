@@ -4,9 +4,9 @@
     {
         internal GameData()
         {
-            this.Id = Guid.NewGuid();
-            this.AwayTeam = string.Empty;
-            this.HomeTeam = string.Empty;
+            Id = Guid.NewGuid();
+            AwayTeam = string.Empty;
+            HomeTeam = string.Empty;
         }
 
         public Guid Id { get; set; }

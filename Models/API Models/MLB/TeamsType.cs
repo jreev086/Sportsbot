@@ -4,10 +4,16 @@ namespace Sportsbot.Models.API_Models.MLB
 {
     internal class TeamsType
     {
+        public TeamsType()
+        {
+            Away = new AwayTeam();
+            Home = new HomeTeam();
+        }
+
         [JsonPropertyName("away")]
-        public AwayTeam? Away;
+        public AwayTeam Away { get; set; }
 
         [JsonPropertyName("home")]
-        public HomeTeam? Home;
+        public HomeTeam Home { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Sportsbot.Services;
 
@@ -10,18 +9,20 @@ namespace Sportsbot
     public class ScoreDiscordBot
     {
         private readonly DiscordShardedClient client;
-        private readonly string? token;
+        private readonly string token;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="config"></param>
-        public ScoreDiscordBot(IConfigurationRoot config)
+        public ScoreDiscordBot(string token)
         {
-            if (config != null)
+            if (string.IsNullOrWhiteSpace(token))
             {
-                this.token = config?.GetRequiredSection("DiscordToken")?.Value ?? string.Empty;
+                throw new ArgumentNullException(nameof(token));
             }
+
+            this.token = token;
 
             var commands = new CommandService(new CommandServiceConfig
             {
@@ -31,6 +32,8 @@ namespace Sportsbot
                 // There's a few more properties you can set,
                 // for example, case-insensitive commands.
                 CaseSensitiveCommands = false,
+
+                SeparatorChar = ' '
             });
 
             client = new DiscordShardedClient(new DiscordSocketConfig
@@ -42,7 +45,6 @@ namespace Sportsbot
             Injector.RegisterInstance(client);
             Injector.RegisterInstance(commands);
             Injector.RegisterType<ICommandHandlerService, CommandHandlerService>();
-            Injector.RegisterInstance(config);
         }
 
         /// <summary>
