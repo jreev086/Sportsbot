@@ -12,12 +12,12 @@ namespace Sportsbot.Models.API_Models.MLB
         }
 
         [JsonPropertyName("id")]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         [JsonPropertyName("name")]
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         [JsonPropertyName("link")]
-        public string? Link { get; set; }
+        public string Link { get; set; }
     }
 }

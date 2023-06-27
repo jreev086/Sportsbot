@@ -2,7 +2,7 @@
 {
     using Microsoft.Extensions.DependencyInjection;
 
-    public class Injector
+    public static class Injector
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public static IServiceProvider ServiceProvider { get; set; }
@@ -28,7 +28,7 @@
             where TInterface : class
             where TImplementation : class, TInterface
         {
-            if(_serviceCollection is not null)
+            if (_serviceCollection is not null)
             {
                 _serviceCollection.AddSingleton<TInterface, TImplementation>();
                 ServiceProvider = _serviceCollection.BuildServiceProvider();
@@ -38,7 +38,7 @@
         public static void RegisterInstance<TInterface>(TInterface instance)
             where TInterface : class
         {
-            if(_serviceCollection is not null)
+            if (_serviceCollection is not null)
             {
                 _serviceCollection.AddSingleton<TInterface>(instance);
                 ServiceProvider = _serviceCollection.BuildServiceProvider();

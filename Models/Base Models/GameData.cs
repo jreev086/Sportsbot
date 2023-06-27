@@ -1,6 +1,6 @@
 ﻿namespace Sportsbot.Models.Base_Models
 {
-    internal class GameData : IGameData
+    internal class GameData
     {
         internal GameData()
         {

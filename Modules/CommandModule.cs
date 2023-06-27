@@ -14,26 +14,13 @@ namespace Sportsbot.Modules
             await Logger.Log(LogSeverity.Info, $"{nameof(CommandModule)}", $"Detected <mlb> command....running {nameof(MLBCommand)}");
             var messageHandler = new BaseballMessageHandler();
 
-            EmbedBuilder result = new();
-
-            switch(arguments)
+            EmbedBuilder result = arguments switch
             {
-                case "final":
-                case "end":
-                    result = messageHandler.EmbedBaseballFinalScore();
-                    break;
-                case "InProgress":
-                case "IP":
-                case "progress":
-                    result = messageHandler.EmbedGamesInProgress();
-                    break;
-                case "standing":
-                    result = messageHandler.EmbedStandings();
-                    break;
-                default:
-                    result = messageHandler.EmbedBaseballFinalScore();
-                    break;
-            }
+                "final" or "end" => messageHandler.EmbedBaseballFinalScore(),
+                "InProgress" or "IP" or "progress" => messageHandler.EmbedGamesInProgress(),
+                "standing" => messageHandler.EmbedStandings(),
+                _ => messageHandler.EmbedBaseballFinalScore(),
+            };
 
             await Context.Channel.SendMessageAsync("", false, result.Build());
             await Context.Channel.DeleteMessageAsync(Context.Message.Id);

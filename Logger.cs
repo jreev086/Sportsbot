@@ -2,7 +2,7 @@
 
 namespace Sportsbot
 {
-    public class Logger
+    public static class Logger
     {
         public static async Task Log(LogSeverity severity, string source, string message, Exception? exception = null)
         {

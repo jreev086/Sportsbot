@@ -1,7 +1,7 @@
 ﻿using Discord;
+using Sportsbot.Models.API_Models.MLB;
 using Sportsbot.Models.Base_Models;
 using System.Text;
-using Sportsbot.Models.API_Models.MLB;
 
 namespace Sportsbot.Handlers
 {
@@ -43,7 +43,6 @@ namespace Sportsbot.Handlers
         /// <exception cref="NotImplementedException"></exception>
         public EmbedBuilder EmbedGamesInProgress()
         {
-            //var games = new List<GameData>();
             throw new NotImplementedException("Not functional yet");
         }
 
@@ -63,7 +62,7 @@ namespace Sportsbot.Handlers
                     {
                         foreach (var game in gameDate.Games)
                         {
-                            if(game.Status is not null && game.Status.DetailedState is not null && game.Status.DetailedState.Equals("final", StringComparison.InvariantCultureIgnoreCase))                       
+                            if (game.Status is not null && game.Status.DetailedState is not null && game.Status.DetailedState.Equals("final", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 games.Add(new GameData
                                 {
@@ -141,9 +140,9 @@ namespace Sportsbot.Handlers
                     return responseContent;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                await Logger.Log(LogSeverity.Error, "GetGameDataAsync()", "Unhandled Exception", ex);
             }
 
             return new GameRoot();
@@ -157,7 +156,7 @@ namespace Sportsbot.Handlers
         private static async Task<TeamRoot> GetTeamDataAsync(string uri)
         {
             try
-            { 
+            {
                 var client = new HttpClient();
 
                 HttpResponseMessage response = await client.GetAsync(uri);
@@ -169,9 +168,9 @@ namespace Sportsbot.Handlers
                     return responseContent;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                await Logger.Log(LogSeverity.Error, "GetTeamDataAsync()", "Unhandled Exception", ex);
             }
 
             return new TeamRoot();

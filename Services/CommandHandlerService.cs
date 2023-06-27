@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using System.Reflection;
 
 namespace Sportsbot.Services
 {
@@ -55,7 +55,7 @@ namespace Sportsbot.Services
             var markPos = 0;
             if (msg.HasCharPrefix('!', ref markPos) || msg.HasCharPrefix('?', ref markPos))
             {
-                var result = await commands.ExecuteAsync(context, markPos, Injector.ServiceProvider);
+                await commands.ExecuteAsync(context, markPos, Injector.ServiceProvider);
             }
         }
     }
